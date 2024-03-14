@@ -19,4 +19,10 @@ describe('AppController', () => {
       expect(appController.getHello()).toBe('Hello World!');
     });
   });
+
+  describe('Given a password validator controller', () => {
+    it('Then it should be a function', () => {
+      expect(typeof appController.passwordValidator).toBe('function');
+    });
+  });
 });
