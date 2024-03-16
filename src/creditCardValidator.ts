@@ -1,5 +1,3 @@
-import { error } from 'console';
-
 type CreditCard = {
   cardNumber: string;
   expirationDate: string;
@@ -7,6 +5,10 @@ type CreditCard = {
 type CardValidatorResponse = {
   isValid: boolean;
   errors: string[];
+};
+
+const errorGenerator = (field: string, type: string): string => {
+  return `${field} should be ${type}`;
 };
 
 export const creditCardValidator = ({
@@ -18,10 +20,6 @@ export const creditCardValidator = ({
     errors: [],
   };
 
-  const errorGenerator = (field: string, type: string): string => {
-    return `${field} should be ${type}`;
-  };
-
   if (typeof cardNumber !== 'string') {
     response.isValid = false;
     response.errors.push(errorGenerator('cardNumber', 'string'));
@@ -30,6 +28,11 @@ export const creditCardValidator = ({
   if (typeof expirationDate !== 'string') {
     response.isValid = false;
     response.errors.push(errorGenerator('expirationDate', 'string'));
+  }
+
+  if (cardNumber.length !== 16) {
+    response.isValid = false;
+    response.errors.push('The card must have at least 16 digits');
   }
 
   return response;
