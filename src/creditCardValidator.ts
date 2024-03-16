@@ -25,15 +25,11 @@ const isValidCardNumberByLuhn = (cardNumber): boolean => {
   return checkSum % 10 == 0;
 };
 
-export const creditCardValidator = ({
-  cardNumber,
-  expirationDate,
-}: CreditCard): CardValidatorResponse => {
-  const response: CardValidatorResponse = {
-    isValid: true,
-    errors: [],
-  };
-
+const creditCardTypeGuards = (
+  response: CardValidatorResponse,
+  cardNumber: string,
+  expirationDate: string,
+): void => {
   if (typeof cardNumber !== 'string') {
     response.isValid = false;
     response.errors.push(errorGenerator('cardNumber', 'string'));
@@ -43,7 +39,12 @@ export const creditCardValidator = ({
     response.isValid = false;
     response.errors.push(errorGenerator('expirationDate', 'string'));
   }
+};
 
+const creditCardCardNumberGuards = (
+  cardNumber: string,
+  response: CardValidatorResponse,
+): void => {
   if (cardNumber.length !== 16) {
     response.isValid = false;
     response.errors.push('The card must have at least 16 digits');
@@ -55,6 +56,19 @@ export const creditCardValidator = ({
       'The card is not valid according to the Luhn algorithm',
     );
   }
+};
+
+export const creditCardValidator = ({
+  cardNumber,
+  expirationDate,
+}: CreditCard): CardValidatorResponse => {
+  const response: CardValidatorResponse = {
+    isValid: true,
+    errors: [],
+  };
+
+  creditCardTypeGuards(response, cardNumber, expirationDate);
+  creditCardCardNumberGuards(cardNumber, response);
 
   return response;
 };
