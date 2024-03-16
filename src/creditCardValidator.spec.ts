@@ -36,4 +36,22 @@ describe('Given a credit card validator', () => {
       expect(cardResponse).toEqual(expectedCardResponse);
     });
   });
+
+  describe('When the card numbre has 16 digits but it does not follow the Luhn algorithm', () => {
+    it('Then the function should return a non valid card object and the Luhn algorithm validation error', () => {
+      const expectedCardResponse = {
+        isValid: false,
+        errors: ['The card is not valid according to the Luhn algorithm'],
+      };
+      const cardNumber = '1234567812345678';
+      const expirationDate = '10/24';
+
+      const cardResponse = creditCardValidator({
+        cardNumber,
+        expirationDate,
+      });
+
+      expect(cardResponse).toEqual(expectedCardResponse);
+    });
+  });
 });
