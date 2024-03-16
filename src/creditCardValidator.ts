@@ -42,8 +42,8 @@ const creditCardTypeGuards = (
 };
 
 const creditCardCardNumberGuards = (
-  cardNumber: string,
   response: CardValidatorResponse,
+  cardNumber: string,
 ): void => {
   if (cardNumber.length !== 16) {
     response.isValid = false;
@@ -58,6 +58,27 @@ const creditCardCardNumberGuards = (
   }
 };
 
+const creditCardNetworkGuards = (
+  response: CardValidatorResponse,
+  cardNumber: string,
+) => {
+  const validNetworks = {
+    2: 'Mastercard',
+    3: 'American Express',
+    4: 'Visa',
+    5: 'Mastercard',
+    6: 'Discover',
+  };
+
+  if (!Object.keys(validNetworks).includes(`${cardNumber[0]}`)) {
+    (response.isValid = false),
+      response.errors.push(
+        'The card must be from one of the following networks: Visa, Mastercard, American Express or Diners Club',
+      );
+  }
+  return response;
+};
+
 export const creditCardValidator = ({
   cardNumber,
   expirationDate,
@@ -68,7 +89,8 @@ export const creditCardValidator = ({
   };
 
   creditCardTypeGuards(response, cardNumber, expirationDate);
-  creditCardCardNumberGuards(cardNumber, response);
+  creditCardCardNumberGuards(response, cardNumber);
+  creditCardNetworkGuards(response, cardNumber);
 
   return response;
 };
