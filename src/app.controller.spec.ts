@@ -24,5 +24,13 @@ describe('AppController', () => {
     it('Then it should be a function', () => {
       expect(typeof appController.passwordValidator).toBe('function');
     });
+
+    it('When it receives an string, then it should true', () => {
+      const stringPassword = '1234';
+      const numericPassword = 1234 as unknown as string;
+
+      expect(appController.passwordValidator(stringPassword)).toBe(true);
+      expect(appController.passwordValidator(numericPassword)).toBe(false);
+    });
   });
 });
