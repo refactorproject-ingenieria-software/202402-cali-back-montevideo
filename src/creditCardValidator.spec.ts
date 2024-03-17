@@ -5,7 +5,10 @@ describe('Given a credit card validator', () => {
     it('Then the function should return a non valid card object and the validation error', () => {
       const expectedCardResponse = {
         isValid: false,
-        errors: ['expirationDate should be string'],
+        errors: [
+          'expirationDate should be string',
+          'The card must have a valid expiration date',
+        ],
       };
       const cardNumber = '4485275742308327';
       const wrongTypeexpirationDate = 5 as unknown as string;

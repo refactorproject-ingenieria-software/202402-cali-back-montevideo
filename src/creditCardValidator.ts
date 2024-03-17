@@ -64,7 +64,7 @@ const creditCardCardNumberGuards = (
 const creditCardNetworkGuards = (
   response: CardValidatorResponse,
   cardNumber: string,
-) => {
+): void => {
   const validNetworks = {
     2: 'Mastercard',
     3: 'American Express',
@@ -79,7 +79,21 @@ const creditCardNetworkGuards = (
         'The card must be from one of the following networks: Visa, Mastercard, American Express or Diners Club',
       );
   }
-  return response;
+};
+
+const verifyFormatExpirationDate = (expirationDate: string): boolean => {
+  const regex = /^(0[1-9]|1[0-2])\/([2-9][0-9])$/;
+  return !regex.test(expirationDate);
+};
+
+const creditCardExpirationDateGuard = (
+  response: CardValidatorResponse,
+  expirationDate: string,
+): void => {
+  if (verifyFormatExpirationDate(expirationDate)) {
+    (response.isValid = false),
+      response.errors.push('The card must have a valid expiration date');
+  }
 };
 
 export const creditCardValidator = ({
@@ -94,6 +108,7 @@ export const creditCardValidator = ({
   creditCardTypeGuards(response, cardNumber, expirationDate);
   creditCardCardNumberGuards(response, cardNumber);
   creditCardNetworkGuards(response, cardNumber);
+  creditCardExpirationDateGuard(response, expirationDate);
 
   return response;
 };
