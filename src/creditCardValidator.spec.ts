@@ -78,14 +78,31 @@ describe('Given a credit card validator', () => {
     });
   });
 
-  describe('When the expiration date is not valid', () => {
+  describe('When the expiration date is not valid format', () => {
     it('Then the function should return a non valid card object and the invalid expiration error', () => {
       const expectedCardResponse = {
         isValid: false,
         errors: ['The card must have a valid expiration date'],
       };
       const cardNumber = '4242424242424242';
-      const expirationDate = '13/24';
+      const expirationDate = 'not-a-date';
+
+      const cardResponse = creditCardValidator({
+        cardNumber,
+        expirationDate,
+      });
+
+      expect(cardResponse).toEqual(expectedCardResponse);
+    });
+  });
+  describe("When the expiration date is valid format but it's a past date", () => {
+    it('Then the function should return a non valid card object and the invalid expiration error', () => {
+      const expectedCardResponse = {
+        isValid: false,
+        errors: ['The card must have a valid expiration date'],
+      };
+      const cardNumber = '4242424242424242';
+      const expirationDate = '01/24';
 
       const cardResponse = creditCardValidator({
         cardNumber,
