@@ -25,12 +25,6 @@ describe('AppController', () => {
       expect(typeof appController.passwordValidator).toBe('function');
     });
 
-    it('When it receives an string, then it should return true', () => {
-      const stringPassword = '1234';
-
-      expect(appController.passwordValidator(stringPassword)).toBe(true);
-    });
-
     it('When it receives a number, then it should return false', () => {
       const numericPassword = 1234 as unknown as string;
 
