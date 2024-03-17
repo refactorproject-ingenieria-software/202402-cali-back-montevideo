@@ -117,11 +117,31 @@ const isValidExpirationDateFormat = (expirationDate: string): boolean => {
   return regex.test(expirationDate);
 };
 
+const isValidDate = (expirationDate: string): boolean => {
+  const expirationDateMonth = parseInt(expirationDate.slice(0, 2), 10);
+  const expirationDateYear = parseInt(expirationDate.slice(3), 10);
+
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = parseInt(
+    currentDate.getFullYear().toString().slice(2),
+    10,
+  );
+
+  const isValidMonth = expirationDateMonth >= currentMonth;
+  const isValidYear = expirationDateYear >= currentYear;
+
+  return isValidMonth && isValidYear;
+};
+
 const validateCreditCardExpirationDate = (
   response: CardValidatorResponse,
   expirationDate: string,
 ): void => {
-  if (!isValidExpirationDateFormat(expirationDate)) {
+  if (
+    !isValidExpirationDateFormat(expirationDate) ||
+    !isValidDate(expirationDate)
+  ) {
     (response.isValid = false),
       response.errors.push('The card must have a valid expiration date');
   }
