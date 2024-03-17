@@ -19,6 +19,11 @@ export class AppController {
       return 'Password must be at least 8 characters';
     }
 
+    const numbersInPassword: null | string[] = password.match(/\d/g);
+    if (!numbersInPassword || numbersInPassword.length < 2) {
+      return 'Password must contain at least 2 numbers';
+    }
+
     return true;
   }
 }
