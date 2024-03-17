@@ -33,8 +33,17 @@ describe('AppController', () => {
 
     it('when the password is shorter than 8 characters, it should return an error message', () => {
       const shortPassword = '1234';
+
       expect(appController.passwordValidator(shortPassword)).toBe(
         'Password must be at least 8 characters',
+      );
+    });
+
+    it('When the password does not contain at least 2 numbers, it should return an error message', () => {
+      const passwordWithoutNumbers = 'superContraseña1';
+
+      expect(appController.passwordValidator(passwordWithoutNumbers)).toBe(
+        'Password must contain at least 2 numbers',
       );
     });
   });
