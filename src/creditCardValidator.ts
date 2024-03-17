@@ -1,21 +1,28 @@
-type CreditCard = {
-  cardNumber: string;
-  expirationDate: string;
+import {
+  CardValidatorResponse,
+  CreditCard,
+  CreditCardField,
+  CreditCardFieldType,
+} from './types';
+
+const CREDIT_CARD_FIELDS: Record<string, CreditCardField> = {
+  CARD_NUMBER: 'cardNumber',
+  EXPIRATION_DATE: 'expirationDate',
 };
-type CardValidatorResponse = {
-  isValid: boolean;
-  errors: string[];
+
+const TYPE = {
+  STRING: 'string',
 };
 
 // Generates error messages for invalid fields type
 const fieldTypeErrorMessageGenerator = (
-  field: string,
-  type: string,
+  field: CreditCardField,
+  type: CreditCardFieldType<typeof field>,
 ): string => {
   return `${field} should be ${type}`;
 };
 
-const currentDigitValueByLuhn = (currentDigit, isEven) => {
+const currentDigitValueByLuhn = (currentDigit: string, isEven: boolean) => {
   let numberDigit = parseInt(currentDigit, 10);
   if (isEven && (numberDigit *= 2) > 9) numberDigit -= 9;
   return numberDigit;
@@ -31,7 +38,7 @@ const currentDigitValueByLuhn = (currentDigit, isEven) => {
  */
 const sumCardNumberByLuhn = (
   i: number,
-  cardNumber: string,
+  cardNumber: CreditCardFieldType<'cardNumber'>,
   cardNumberSum: number,
 ) => {
   const isEven = i % 2 === 0;
@@ -41,13 +48,15 @@ const sumCardNumberByLuhn = (
   return cardNumberSum;
 };
 
-const checkSumLuhnConditions = (sumAmount) => {
+const checkSumLuhnConditions = (sumAmount: number) => {
   const isMorenThanZero = sumAmount > 0;
   const isTeenFactor = sumAmount % 10 === 0;
   return isMorenThanZero && isTeenFactor;
 };
 
-const isValidCardNumberByLuhn = (cardNumber: string): boolean => {
+const isValidCardNumberByLuhn = (
+  cardNumber: CreditCardFieldType<'cardNumber'>,
+): boolean => {
   let cardNumberSum = 0;
   for (let i = cardNumber.length - 1; i >= 0; i--) {
     cardNumberSum = sumCardNumberByLuhn(i, cardNumber, cardNumberSum);
@@ -57,27 +66,33 @@ const isValidCardNumberByLuhn = (cardNumber: string): boolean => {
 
 const validateCreditCardFieldsType = (
   response: CardValidatorResponse,
-  cardNumber: string,
-  expirationDate: string,
+  cardNumber: CreditCardFieldType<'cardNumber'>,
+  expirationDate: CreditCardFieldType<'expirationDate'>,
 ): void => {
-  if (typeof cardNumber !== 'string') {
+  if (typeof cardNumber !== TYPE.STRING) {
     response.isValid = false;
     response.errors.push(
-      fieldTypeErrorMessageGenerator('cardNumber', 'string'),
+      fieldTypeErrorMessageGenerator(
+        CREDIT_CARD_FIELDS.CARD_NUMBER,
+        TYPE.STRING,
+      ),
     );
   }
 
-  if (typeof expirationDate !== 'string') {
+  if (typeof expirationDate !== TYPE.STRING) {
     response.isValid = false;
     response.errors.push(
-      fieldTypeErrorMessageGenerator('expirationDate', 'string'),
+      fieldTypeErrorMessageGenerator(
+        CREDIT_CARD_FIELDS.EXPIRATION_DATE,
+        TYPE.STRING,
+      ),
     );
   }
 };
 
 const validateCreditCardCardNumber = (
   response: CardValidatorResponse,
-  cardNumber: string,
+  cardNumber: CreditCardFieldType<'cardNumber'>,
 ): void => {
   if (cardNumber.length !== 16) {
     response.isValid = false;
