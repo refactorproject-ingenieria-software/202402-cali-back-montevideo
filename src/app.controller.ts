@@ -10,5 +10,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  passwordValidator() {}
+  passwordValidator(password: string) {
+    if (typeof password !== 'string') {
+      return false;
+    }
+
+    return true;
+  }
 }
