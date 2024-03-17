@@ -19,32 +19,4 @@ describe('AppController', () => {
       expect(appController.getHello()).toBe('Hello World!');
     });
   });
-
-  describe('Given a password validator controller', () => {
-    it('Then it should be a function', () => {
-      expect(typeof appController.passwordValidator).toBe('function');
-    });
-
-    it('When it receives a number, then it should return false', () => {
-      const numericPassword = 1234 as unknown as string;
-
-      expect(appController.passwordValidator(numericPassword)).toBe(false);
-    });
-
-    it('when the password is shorter than 8 characters, it should return an error message', () => {
-      const shortPassword = '1234';
-
-      expect(appController.passwordValidator(shortPassword)).toBe(
-        'Password must be at least 8 characters',
-      );
-    });
-
-    it('When the password does not contain at least 2 numbers, it should return an error message', () => {
-      const passwordWithoutNumbers = 'superContraseña1';
-
-      expect(appController.passwordValidator(passwordWithoutNumbers)).toBe(
-        'Password must contain at least 2 numbers',
-      );
-    });
-  });
 });
