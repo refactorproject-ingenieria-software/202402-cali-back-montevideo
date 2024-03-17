@@ -95,4 +95,44 @@ describe('Given a credit card validator', () => {
       expect(cardResponse).toEqual(expectedCardResponse);
     });
   });
+  describe('When it receives a card that does not fullfill any criteria', () => {
+    it('Then the function should return a non valid card object and all the errors', () => {
+      const expectedCardResponse = {
+        isValid: false,
+        errors: [
+          'cardNumber should be string',
+          'The card must have at least 16 digits',
+          'The card is not valid according to the Luhn algorithm',
+          'The card must be from one of the following networks: Visa, Mastercard, American Express or Diners Club',
+          'The card must have a valid expiration date',
+        ],
+      };
+      const cardNumber = 123 as unknown as string;
+      const expirationDate = 'not-a-date';
+
+      const cardResponse = creditCardValidator({
+        cardNumber,
+        expirationDate,
+      });
+
+      expect(cardResponse).toEqual(expectedCardResponse);
+    });
+  });
+  describe('When it receives a card that fullfills all criteria', () => {
+    it('Then the function should return a valid card object and no errors', () => {
+      const expectedCardResponse = {
+        isValid: true,
+        errors: [],
+      };
+      const cardNumber = '4485275742308327';
+      const expirationDate = '12/24';
+
+      const cardResponse = creditCardValidator({
+        cardNumber,
+        expirationDate,
+      });
+
+      expect(cardResponse).toEqual(expectedCardResponse);
+    });
+  });
 });
