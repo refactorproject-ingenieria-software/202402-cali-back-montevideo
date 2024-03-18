@@ -32,7 +32,7 @@ describe('Given a password validator controller', () => {
     expect(response.invalidPasswordErrors).toContain(errorMessage);
   });
 
-  it.only('when the password does not contain at least one capital letter, it should return an error message', () => {
+  it('when the password does not contain at least one capital letter, it should return an error message', () => {
     const passwordWithoutCapitals = 'supercontraseña12';
     const errorMessage = 'Password must contain at least one capital letter';
 

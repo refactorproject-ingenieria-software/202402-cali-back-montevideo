@@ -24,6 +24,16 @@ const hasPasswordAtLeastTwoNumbers = ({
   }
 };
 
+const hasPasswordCapitalLetter = ({
+  password,
+}: PasswordInParams): string | void => {
+  const capitalInPassword = /[A-Z]/.test(password);
+
+  if (!capitalInPassword) {
+    return 'Password must contain at least one capital letter';
+  }
+};
+
 export const passwordValidator = (password: string) => {
   const errors = [];
 
@@ -33,6 +43,7 @@ export const passwordValidator = (password: string) => {
 
   errors.push(hasPasswordValidLength({ password }));
   errors.push(hasPasswordAtLeastTwoNumbers({ password }));
+  errors.push(hasPasswordCapitalLetter({ password }));
 
   const invalidPasswordErrors = errors.filter((error) => !!error);
 
