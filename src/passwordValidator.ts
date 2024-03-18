@@ -34,6 +34,17 @@ const hasPasswordCapitalLetter = ({
   }
 };
 
+const hasPasswordSpecialCharacter = ({
+  password,
+}: PasswordInParams): string | void => {
+  const specialCharacters = /[!@#$%^&*(),.?":{}|<>] /;
+  const specialCharacterInPassword = specialCharacters.test(password);
+
+  if (!specialCharacterInPassword) {
+    return 'Password must contain at least one special character';
+  }
+};
+
 export const passwordValidator = (password: string) => {
   const errors = [];
 
@@ -44,6 +55,7 @@ export const passwordValidator = (password: string) => {
   errors.push(hasPasswordValidLength({ password }));
   errors.push(hasPasswordAtLeastTwoNumbers({ password }));
   errors.push(hasPasswordCapitalLetter({ password }));
+  errors.push(hasPasswordSpecialCharacter({ password }));
 
   const invalidPasswordErrors = errors.filter((error) => error);
 
