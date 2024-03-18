@@ -41,4 +41,14 @@ describe('Given a password validator controller', () => {
     expect(response.valid).toBe(false);
     expect(response.invalidPasswordErrors).toContain(errorMessage);
   });
+
+  it('When the password does not contain at least one special character, then it should return an error message', () => {
+    const passwordWithoutSpecialCharacters = 'superContraseña12';
+    const errorMessage = 'Password must contain at least one special character';
+
+    const response = passwordValidator(passwordWithoutSpecialCharacters);
+
+    expect(response.valid).toBe(false);
+    expect(response.invalidPasswordErrors).toContain(errorMessage);
+  });
 });
