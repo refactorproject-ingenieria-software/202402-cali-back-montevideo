@@ -37,7 +37,7 @@ const hasPasswordCapitalLetter = ({
 const hasPasswordSpecialCharacter = ({
   password,
 }: PasswordInParams): string | void => {
-  const specialCharacters = /[!@#$%^&*(),.?":{}|<>] /;
+  const specialCharacters = /[!@#$%^ &*(),.?":{}|<>]/;
   const specialCharacterInPassword = specialCharacters.test(password);
 
   if (!specialCharacterInPassword) {
