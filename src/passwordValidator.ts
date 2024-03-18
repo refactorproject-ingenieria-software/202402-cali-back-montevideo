@@ -45,7 +45,7 @@ export const passwordValidator = (password: string) => {
   errors.push(hasPasswordAtLeastTwoNumbers({ password }));
   errors.push(hasPasswordCapitalLetter({ password }));
 
-  const invalidPasswordErrors = errors.filter((error) => !!error);
+  const invalidPasswordErrors = errors.filter((error) => error);
 
   return {
     valid: !invalidPasswordErrors.length,
