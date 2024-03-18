@@ -2,13 +2,17 @@ interface PasswordInParams {
   password: string;
 }
 
-const isPasswordString = (password: unknown): password is string => {
-  return typeof password === 'string';
+type MaybeString = string | void;
+
+const isPasswordString = ({ password }: PasswordInParams): never | void => {
+  if (typeof password !== 'string') {
+    throw new Error('Password must be an string');
+  }
 };
 
 const hasPasswordValidLength = ({
   password,
-}: PasswordInParams): string | void => {
+}: PasswordInParams): MaybeString => {
   if (password.length < 8) {
     return 'Password must be at least 8 characters';
   }
@@ -16,8 +20,8 @@ const hasPasswordValidLength = ({
 
 const hasPasswordAtLeastTwoNumbers = ({
   password,
-}: PasswordInParams): string | void => {
-  const numbersInPassword: null | string[] = password.match(/\d/g);
+}: PasswordInParams): MaybeString => {
+  const numbersInPassword: string[] = password.match(/\d/g) ?? [];
 
   if (!numbersInPassword || numbersInPassword.length < 2) {
     return 'Password must contain at least 2 numbers';
@@ -26,7 +30,7 @@ const hasPasswordAtLeastTwoNumbers = ({
 
 const hasPasswordCapitalLetter = ({
   password,
-}: PasswordInParams): string | void => {
+}: PasswordInParams): MaybeString => {
   const capitalInPassword = /[A-Z]/.test(password);
 
   if (!capitalInPassword) {
@@ -36,7 +40,7 @@ const hasPasswordCapitalLetter = ({
 
 const hasPasswordSpecialCharacter = ({
   password,
-}: PasswordInParams): string | void => {
+}: PasswordInParams): MaybeString => {
   const specialCharacters = /[!@#$%^ &*(),.?":{}|<>]/;
   const specialCharacterInPassword = specialCharacters.test(password);
 
@@ -48,9 +52,7 @@ const hasPasswordSpecialCharacter = ({
 export const passwordValidator = (password: string) => {
   const errors = [];
 
-  if (!isPasswordString(password)) {
-    throw new Error('Password must be an string');
-  }
+  isPasswordString({ password });
 
   errors.push(hasPasswordValidLength({ password }));
   errors.push(hasPasswordAtLeastTwoNumbers({ password }));
