@@ -1,9 +1,5 @@
 import { creditCardValidator } from './creditCardValidator';
-import {
-  CardValidatorResponse,
-  CreditCardField,
-  CreditCardFieldType,
-} from './types';
+import { CardValidatorResponse, CreditCardFieldType } from './types';
 
 describe('Given a credit card validator', () => {
   describe('When the functions receives a non string input', () => {
